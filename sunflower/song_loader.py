@@ -8,7 +8,7 @@ ALLOWED_EXTENSIONS = {"mp3", "wav"}
 
 
 class Song:
-    def __init__(self, filelike, extension:str):
+    def __init__(self, filelike, extension: str):
         """Creates a Song object.
 
         :param filelike: Song in bytes
@@ -67,7 +67,7 @@ class Song:
 
         if self.channels == 2:
 
-            waveform = waveform.reshape((-1, 2)).astype("float32")
+            waveform = waveform.reshape((2, -1)).astype("float32")
 
         else:
 
@@ -90,7 +90,11 @@ class Song:
     def process_song(self) -> None:
         """Removes silence at the beginning of the song."""
 
-        self.waveform, _ = librosa.effects.trim(self.waveform)
+        self.waveform, _ = librosa.effects.trim(
+            self.waveform, frame_length=128, hop_length=32, top_db=40
+        )
+
+        self.mono_waveform = librosa.to_mono(self.waveform)
 
 
 def allowed_file(filename: str) -> (bool, str):
