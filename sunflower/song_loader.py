@@ -76,9 +76,7 @@ class Song:
         # Normalization
         waveform = waveform / (self.sample_width ** 15)
         self.waveform = waveform
-        self.mono_waveform = np.array(a.set_channels(1).get_array_of_samples()).astype(
-            "float32"
-        )
+        self.mono_waveform = librosa.to_mono(self.waveform)
         self.sr = a.frame_rate
 
     def print_attributes(self) -> None:
@@ -88,7 +86,10 @@ class Song:
         print(", ".join("%s: %s" % item for item in attrs.items()))
 
     def process_song(self) -> None:
-        """Removes silence at the beginning of the song."""
+        """Removes silence at the beginning of the song.
+
+        TO-DO: Fine-tune top_db 
+        """
 
         self.waveform, _ = librosa.effects.trim(
             self.waveform, frame_length=128, hop_length=32, top_db=40
