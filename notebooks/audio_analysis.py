@@ -9,6 +9,7 @@ from sunflower.song_analyzer import SongAnalyzer
 from sunflower.utils import export_wav
 from sunflower.benchmark import run_benchmark
 from sunflower.song_visualizer import visualize_waveform, visualize_waveform_plotly
+from moviepy.editor import *
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 import numpy as np
@@ -94,5 +95,25 @@ def draw_rectangle(audiobar, frame):
     return frame
 
 
+# %%
+# getting a matrix which contains amplitude values according to frequency and time indexes
+
+
+def color_clip(size, duration, fps=25, color=(50, 50, 50)):
+    return ColorClip(size, color, duration=duration)
+
+
+size = (200, 200)
+duration = 10
+clip = color_clip(size, duration)
+
+clip.preview()
+
+
+# %%
+pygame.quit()
+# %%
+clip = VideoFileClip("<path to file>")
+final_clip = clip.fl_image(draw_rectangle)
 # %%
 # getting a matrix which contains amplitude values according to frequency and time indexes
