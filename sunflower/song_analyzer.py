@@ -96,7 +96,7 @@ class SongAnalyzer:
 
         # getting an array of time periodic
         times = librosa.core.frames_to_time(
-            np.arange(self.song.waveform.shape[1]),
+            np.arange(self.spectogram.shape[1]),
             sr=self.song.sr,
             hop_length=512,
             n_fft=2048 * 4,

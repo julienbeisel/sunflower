@@ -21,7 +21,7 @@ import pygame
 # %%
 # Loading example file
 
-raw_audio, extension = load_from_disk("../data_benchmark/drums.wav")
+raw_audio, extension = load_from_disk("../data_benchmark/test_eq.wav")
 
 song = Song(raw_audio, extension)
 
@@ -33,15 +33,6 @@ song.print_attributes()
 song_analyzer = SongAnalyzer(song)
 
 # %%
-def clamp(min_value, max_value, value):
-
-    if value < min_value:
-        return min_value
-
-    if value > max_value:
-        return max_value
-
-    return value
 
 
 class AudioBar:
@@ -53,7 +44,7 @@ class AudioBar:
         decibel,
         color=(0, 0, 0),
         width=50,
-        min_height=10,
+        min_height=50,
         max_height=100,
         min_decibel=-80,
         max_decibel=0,
@@ -69,13 +60,11 @@ class AudioBar:
 
         self.min_decibel, self.max_decibel = min_decibel, max_decibel
 
-        self.__decibel_height_ratio = (self.max_height - self.min_height) / (
-            self.max_decibel - self.min_decibel
+        decibel_height_ratio = abs(
+            (max_height - min_height) / (max_decibel - min_decibel)
         )
 
-        desired_height = decibel * self.__decibel_height_ratio + self.max_height
-
-        self.height = clamp(self.min_height, self.max_height, desired_height)
+        self.height += decibel * decibel_height_ratio
 
 
 def draw_rectangle(frame, audiobar):
@@ -85,7 +74,7 @@ def draw_rectangle(frame, audiobar):
     # Change (top, bottom, left, right) to your coordinates
     left = int(audiobar.x)
     right = left + int(audiobar.width)
-    bottom = 0
+    bottom = audiobar.y
     top = int(bottom) + int(audiobar.height)
     frame[bottom:top, left:right] = audiobar.color
 
@@ -100,15 +89,19 @@ def color_clip(size, duration, fps=25, color=(50, 50, 50)):
     return ColorClip(size, color, duration=duration)
 
 
-frequencies = np.arange(100, 8000, 100)
+frequencies = np.arange(100, 10000, 100)
 size = (400, 400)
 audioclip = AudioArrayClip(song.waveform.reshape(-1, 2), song.sr)
 duration = audioclip.duration
 
-fps_equalizer = 0.01
+fps_equalizer = 0.1
 time = 0
-width = 1
+width = 5
+y = 0
 clips = []
+
+comptdebug = 0
+
 
 while len(clips) * fps_equalizer < duration:
     x = 0
@@ -121,7 +114,7 @@ while len(clips) * fps_equalizer < duration:
                 image,
                 AudioBar(
                     x,
-                    300,
+                    y,
                     c,
                     song_analyzer.get_decibel(time, c),
                     max_height=400,
@@ -136,6 +129,7 @@ while len(clips) * fps_equalizer < duration:
     clips.append(clip)
 
     time += fps_equalizer
+
 
 clip = CompositeVideoClip(clips)
 clip = clip.set_audio(audioclip)
