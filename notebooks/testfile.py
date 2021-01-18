@@ -2,9 +2,11 @@ import sys
 
 sys.path.insert(0, "..")
 import librosa
+import librosa.display
 import numpy as np
 import pygame
 from sunflower.sunflower.song_loader import Song, load_from_disk
+import matplotlib.pyplot as plt
 
 ########
 # REFERENCE SCRIPT FOR MY DEV
@@ -79,6 +81,9 @@ song = Song(raw_audio, extension)
 
 time_series = song.mono_waveform
 
+print(song.waveform.shape)
+print(time_series.shape)
+
 time_series, sample_rate = (
     time_series,
     song.sr,
@@ -92,7 +97,11 @@ spectrogram = librosa.amplitude_to_db(
     stft, ref=np.max
 )  # converting the matrix to decibel matrix
 
-print(spectrogram)
+librosa.display.specshow(spectrogram, y_axis="log", x_axis="time")
+plt.title("Your title")
+plt.colorbar(format="%+2.0f dB")
+plt.tight_layout()
+plt.show()
 
 frequencies = librosa.core.fft_frequencies(
     n_fft=2048 * 4
