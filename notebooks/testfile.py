@@ -93,15 +93,7 @@ time_series, sample_rate = (
 # getting a matrix which contains amplitude values according to frequency and time indexes
 stft = np.abs(librosa.stft(time_series, hop_length=512, n_fft=2048 * 4))
 
-spectrogram = librosa.amplitude_to_db(
-    stft, ref=np.max
-)  # converting the matrix to decibel matrix
-
-librosa.display.specshow(spectrogram, y_axis="log", x_axis="time")
-plt.title("Your title")
-plt.colorbar(format="%+2.0f dB")
-plt.tight_layout()
-plt.show()
+spectrogram = librosa.amplitude_to_db(stft)  # converting the matrix to decibel matrix
 
 frequencies = librosa.core.fft_frequencies(
     n_fft=2048 * 4

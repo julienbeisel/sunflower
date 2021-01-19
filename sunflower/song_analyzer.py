@@ -83,7 +83,9 @@ class SongAnalyzer:
 
         # getting a matrix which contains amplitude values according to frequency and time indexes
         stft = np.abs(
-            librosa.stft(self.song.mono_waveform, hop_length=512, n_fft=2048 * 4)
+            librosa.stft(
+                self.song.mono_waveform_analysis, hop_length=512, n_fft=2048 * 4
+            )
         )
 
         self.spectrogram = librosa.amplitude_to_db(
@@ -96,7 +98,7 @@ class SongAnalyzer:
 
         # getting an array of time periodic
         times = librosa.core.frames_to_time(
-            np.arange(self.spectogram.shape[1]),
+            np.arange(self.spectrogram.shape[1]),
             sr=self.song.sr,
             hop_length=512,
             n_fft=2048 * 4,

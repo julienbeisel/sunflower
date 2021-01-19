@@ -91,7 +91,8 @@ def color_clip(size, duration, fps=25, color=(50, 50, 50)):
 
 frequencies = np.arange(100, 10000, 100)
 size = (400, 400)
-audioclip = AudioArrayClip(song.waveform.reshape(-1, 2), song.sr)
+audioclip = AudioArrayClip(song.waveform.reshape(-1, 2), song.sr,)
+
 duration = audioclip.duration
 
 fps_equalizer = 0.1
@@ -145,3 +146,9 @@ clip.write_videofile(
 )
 # %%
 # getting a matrix which contains amplitude values according to frequency and time indexes
+
+# %%
+
+# %%
+
+# %%

@@ -30,6 +30,11 @@ class Song:
 
         self.waveform = None
         self.mono_waveform = None
+
+        # Waveforms with fortran style reshape
+        self.waveform_analysis = None
+        self.mono_waveform_analysis = None
+
         self.extension = None
         self.channels = None
         self.sr = None
@@ -67,16 +72,23 @@ class Song:
 
         if self.channels == 2:
 
-            waveform = waveform.reshape((2, -1)).astype("float32")
+            waveform_analysis = waveform.reshape(self.channels, -1, order="F").astype(
+                "float32"
+            )
+            waveform = waveform.reshape(self.channels, -1).astype("float32")
 
         else:
 
             waveform = waveform.astype("float32")
+            waveform_analysis = waveform
 
         # Normalization
-        waveform = waveform / (self.sample_width ** 15)
+        waveform = normalize(waveform, self.sample_width)
+        waveform_analysis = normalize(waveform_analysis, self.sample_width)
+
         self.waveform = waveform
-        self.mono_waveform = librosa.to_mono(self.waveform)
+        self.waveform_analysis = waveform_analysis
+
         self.sr = a.frame_rate
 
     def print_attributes(self) -> None:
@@ -95,7 +107,16 @@ class Song:
             self.waveform, frame_length=128, hop_length=32, top_db=40
         )
 
+        difference = self.waveform.shape[1] - self.waveform_analysis.shape[1]
+
+        self.waveform_analysis = self.waveform_analysis[:, difference:]
+
         self.mono_waveform = librosa.to_mono(self.waveform)
+        self.mono_waveform_analysis = librosa.to_mono(self.waveform_analysis)
+
+
+def normalize(waveform, sample_width):
+    return waveform / (sample_width ** 15)
 
 
 def allowed_file(filename: str) -> (bool, str):
