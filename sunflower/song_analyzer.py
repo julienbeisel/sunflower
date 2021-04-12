@@ -37,8 +37,6 @@ class SongAnalyzer:
 
         self.set_frequencies()
 
-        self.drop_beats = None
-
         ######################
         # Features
 
@@ -120,9 +118,9 @@ class SongAnalyzer:
 
     def process_decibel_per_frequencies(
         self,
-        rate_frequencies=1,
-        rate_duration=1 / 4,
-        mode="avg",
+        rate_frequencies=1 / 12,
+        rate_duration=1 / 16,
+        mode="peak",
         freq_study: str = "bass",
     ):
         """Get average frequencies.
@@ -148,27 +146,25 @@ class SongAnalyzer:
         beat_duration = 60 / self.tempo
         song_duration = librosa.get_duration(self.song.waveform, sr=self.song.sr)
 
-        timestamps = [0]
+        timestamps = []
 
         timestamp_meas = 0
 
         while timestamp_meas < song_duration:
 
-            timestamp_meas += beat_duration * rate_duration
             timestamps.append(timestamp_meas)
+            timestamp_meas += beat_duration * rate_duration
 
         # Timestamps corresponding to each measure start
 
-        timestamps_measures = [0]
+        timestamps_measures = []
 
         timestamp_meas = 0
 
         while timestamp_meas < song_duration:
 
-            timestamp_meas += beat_duration
             timestamps_measures.append(timestamp_meas)
-
-        print(timestamps_measures)
+            timestamp_meas += beat_duration
 
         if mode == "peak":
             results = [timestamps]
@@ -216,9 +212,3 @@ class SongAnalyzer:
             results.append(list_db)
 
         return results
-
-    def set_drop(self, drop_beats: float) -> None:
-        """Set drop.
-        """
-
-        self.drop_beats = drop_beats
