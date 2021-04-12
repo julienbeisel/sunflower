@@ -2,7 +2,7 @@ from .song_loader import Song
 import numpy as np
 import librosa
 
-BASS_RANGE = {"name": "bass", "start": 50, "stop": 100}
+BASS_RANGE = {"name": "bass", "start": 50, "stop": 80}
 HEAVY_RANGE = {"name": "heavy_range", "start": 101, "stop": 250}
 FREQUENCY_RANGES = [BASS_RANGE, HEAVY_RANGE]
 
@@ -125,7 +125,7 @@ class SongAnalyzer:
         ]
 
     def process_decibel_per_frequencies(
-        self, rate_frequencies=1 / 10, rate_duration=1 / 16, mode="avg"
+        self, rate_frequencies=1 / 10, rate_duration=1 / 4, mode="avg"
     ):
         """Get average frequencies.
 
@@ -134,12 +134,35 @@ class SongAnalyzer:
         :param rate_duration: % of the bpm duration
         """
 
+        # Note: These timestramps cant be computed with np.linspace
+        # We know the song starts at the beginning of a measure, but we don't know it it
+        # ends at the end of a measure (reverb, delay etc.)
+
         # Timestamps to compute energy
         beat_duration = 60 / self.tempo
         song_duration = librosa.get_duration(self.song.waveform, sr=self.song.sr)
-        timestamps = np.linspace(
-            0, song_duration, int(song_duration / (beat_duration * rate_duration))
-        )
+
+        timestamps = [0]
+
+        timestamp_meas = 0
+
+        while timestamp_meas < song_duration:
+
+            timestamp_meas += beat_duration * rate_duration
+            timestamps.append(timestamp_meas)
+
+        # Timestamps corresponding to each measure start
+
+        timestamps_measures = [0]
+
+        timestamp_meas = 0
+
+        while timestamp_meas < song_duration:
+
+            timestamp_meas += beat_duration
+            timestamps_measures.append(timestamp_meas)
+
+        print(timestamps_measures)
 
         if mode == "peak":
             results = [timestamps]
@@ -184,7 +207,8 @@ class SongAnalyzer:
 
             elif mode == "peak":
 
-                reference_value = np.mean(list_db)
+                # reference_value = np.mean(list_db)
+                reference_value = np.percentile(list_db, 95)
                 list_db = np.where(list_db < reference_value, 0, 1)
                 results.append(list_db)
 
