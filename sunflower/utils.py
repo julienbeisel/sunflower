@@ -1,11 +1,12 @@
-from .song_loader import Song
-import soundfile as sf
 import numpy as np
+import soundfile as sf
+
+from .song_loader import Song
 
 
 def export_wav(song: Song, path):
-    """TO DO: Move this function somewhere else. 
-    
+    """TO DO: Move this function somewhere else.
+
     --- Just used for tests atm ---
     """
 

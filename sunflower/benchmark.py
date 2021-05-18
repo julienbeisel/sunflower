@@ -1,11 +1,11 @@
-from .song_loader import Song,load_from_disk
-from .song_analyzer import SongAnalyzer
 import json
+
+from .song_analyzer import SongAnalyzer
+from .song_loader import Song, load_from_disk
 
 
 def run_benchmark(folder="../data/"):
-    """Check the accuracy of the algorithms.
-    """
+    """Check the accuracy of the algorithms."""
 
     with open(f"{folder}info_benchmark.json") as json_file:
         info_benchmark = json.load(json_file)
@@ -14,7 +14,7 @@ def run_benchmark(folder="../data/"):
 
         raw_audio, extension = load_from_disk(f"{folder}{filename}")
 
-        song = Song(raw_audio, extension) 
+        song = Song(raw_audio, extension)
 
         song_analyzer = SongAnalyzer(song)
         song_analyzer.detect_tempo()

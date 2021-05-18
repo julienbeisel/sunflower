@@ -1,6 +1,7 @@
-from .song_loader import Song
-import numpy as np
 import librosa
+import numpy as np
+
+from .song_loader import Song
 
 BASS_RANGE = {"name": "bass", "start": 50, "stop": 80}
 HEAVY_RANGE = {"name": "heavy_range", "start": 101, "stop": 250}
@@ -41,8 +42,7 @@ class SongAnalyzer:
         # Features
 
     def detect_tempo(self):
-        """Detects tempo of a track.
-        """
+        """Detects tempo of a track."""
 
         if (self.song.sr is None) or (self.song.waveform is None):
             raise ValueError("No song was loaded.")
@@ -64,8 +64,7 @@ class SongAnalyzer:
         self.beat_frames = beat_frames
 
     def adjust_tempo(self) -> float:
-        """Adjusts the BPM for more coherence (e.g. turning 160 BPM into 80 BPM)
-        """
+        """Adjusts the BPM for more coherence (e.g. turning 160 BPM into 80 BPM)"""
 
         THRESOLD = 110
 
@@ -77,8 +76,7 @@ class SongAnalyzer:
         self.tempo = round(self.tempo, 0)
 
     def set_frequencies(self):
-        """Choose the value by its time and frequency.
-        """
+        """Choose the value by its time and frequency."""
 
         # getting a matrix which contains amplitude values according to frequency and time indexes
         stft = np.abs(
@@ -110,8 +108,7 @@ class SongAnalyzer:
         )
 
     def get_decibel(self, target_time, freq):
-        """Multiply the time and the frequency we want by the ratio to get the indexes.
-        """
+        """Multiply the time and the frequency we want by the ratio to get the indexes."""
         return self.spectrogram[int(freq * self.frequencies_index_ratio)][
             int(target_time * self.time_index_ratio)
         ]
@@ -128,7 +125,7 @@ class SongAnalyzer:
         """Get average frequencies.
 
         :param mode: Options: avg, peak
-        :param rate_frequencies: 
+        :param rate_frequencies:
         :param rate_duration: % of the bpm duration
         :param freq_range: frequence range to study
         """
