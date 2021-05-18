@@ -3,7 +3,6 @@ import io
 import librosa
 import numpy as np
 import pydub
-import soundfile as sf
 
 ALLOWED_EXTENSIONS = {"mp3", "wav"}
 
@@ -143,7 +142,6 @@ def allowed_file(filename: str) -> (bool, str):
     allowed = False
 
     if "." in filename:
-
         extension = filename.rsplit(".", 1)[1].lower()
 
         allowed = filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS

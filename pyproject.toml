@@ -8,7 +8,6 @@ authors = ["Julien Beisel"]
 python = "^3.7"
 librosa = "^0.8.0"
 numpy = "^1.20.3"
-SoundFile = "^0.10.3"
 pydub = "^0.25.1"
 matplotlib = "^3.4.2"
 plotly = "^4.14.3"

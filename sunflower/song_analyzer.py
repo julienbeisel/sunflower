@@ -128,6 +128,8 @@ class SongAnalyzer:
         :param rate_frequencies:
         :param rate_duration: % of the bpm duration
         :param freq_range: frequence range to study
+
+        TODO: reduce complexity
         """
 
         if freq_study == "bass":

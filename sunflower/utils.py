@@ -1,4 +1,3 @@
-import numpy as np
 import soundfile as sf
 
 from .song_loader import Song
