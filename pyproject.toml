@@ -5,7 +5,7 @@ description = ""
 authors = ["Julien Beisel"]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = ">=3.7.1,<4.0"
 librosa = "^0.8.0"
 numpy = "^1.20.3"
 pydub = "^0.25.1"
@@ -17,6 +17,7 @@ pytest = "^3.4"
 black = "^21.5b1"
 flake8 = "^3.9.2"
 jupyter = "^1.0.0"
+pandas = "^1.2.4"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
