@@ -115,7 +115,7 @@ class Song:
             self.waveform, frame_length=128, hop_length=32, top_db=40
         )
 
-        difference = self.waveform.shape[1] - self.waveform_analysis.shape[1]
+        difference = self.waveform_analysis.shape[1] - self.waveform.shape[1]
 
         self.waveform_analysis = self.waveform_analysis[:, difference:]
 

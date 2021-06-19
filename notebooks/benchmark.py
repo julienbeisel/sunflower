@@ -1,14 +1,14 @@
-import sys
-
-sys.path.insert(0, "..")
-
 from sunflower.song_loader import Song, load_from_disk
 from sunflower.song_analyzer import SongAnalyzer
-import soundfile as sf
 import pandas as pd
 
+# Reading benchmark data
 df_benchmark = pd.read_csv("data/benchmark/benchmark.csv", sep=";")
 df_benchmark["bpm"] = df_benchmark["bpm"].str.replace(",", ".").astype(float)
+
+# Making a copy for results
+df_results = df_benchmark.copy()
+df_results["drop_estimation"] = 0
 
 
 def compute_limits_detection(timestamps, detection, duration=None):
@@ -48,8 +48,12 @@ for row in df_benchmark.itertuples():
         mode="peak", sensibility=90,
     )
 
-    drop_time = compute_limits_detection(find_drop[0], find_drop[1])[0]
+    drop_time = round(compute_limits_detection(find_drop[0], find_drop[1])[0], 0)
 
     print(f"Song : {row.name}")
     print(f"Drop found : {round(drop_time,0)} - Real drop : {row.drop}")
 
+    df_results.loc[df_results["name"] == row.name, "drop_estimation"] = drop_time
+
+
+print((df_results["drop_estimation"] - df_results["drop"]).describe())
