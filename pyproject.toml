@@ -6,8 +6,18 @@ authors = ["Julien Beisel"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
-black = "^19.10b0"
 librosa = "^0.8.0"
+numpy = "^1.20.3"
+pydub = "^0.25.1"
+matplotlib = "^3.4.2"
+plotly = "^4.14.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.4"
+black = "^21.5b1"
+flake8 = "^3.9.2"
+jupyter = "^1.0.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

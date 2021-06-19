@@ -1,12 +1,11 @@
-import matplotlib.pyplot as plt
 import librosa.display
+import matplotlib.pyplot as plt
 import numpy as np
 import plotly.graph_objects as go
 
 
 def visualize_waveform(song):
-    """Waveform visualization.
-    """
+    """Waveform visualization."""
 
     plt.figure(figsize=(16, 4))
     librosa.display.waveplot(song.mono_waveform, sr=song.sr)

@@ -1,7 +1,7 @@
 import io
-import pydub
-import numpy as np
 import librosa
+import numpy as np
+import pydub
 
 ALLOWED_EXTENSIONS = {"mp3", "wav"}
 
@@ -52,7 +52,7 @@ class Song:
 
     def load_from_filelike(self, filelike, extension: str):
         """Filelike to librosa.
-        
+
         :param filelike: Song in bytes
         :param extension: Extension of the song
         Extensions available : ['mp3','wav']
@@ -108,7 +108,7 @@ class Song:
     def process_song(self) -> None:
         """Removes silence at the beginning of the song.
 
-        TO-DO: Fine-tune top_db 
+        TO-DO: Fine-tune top_db
         """
 
         self.waveform, _ = librosa.effects.trim(
@@ -124,8 +124,7 @@ class Song:
 
 
 def normalize(waveform, sample_width):
-    """Normalize waveform.
-    """
+    """Normalize waveform."""
 
     return waveform / (2 ** (8 * sample_width - 1))
 
@@ -148,7 +147,6 @@ def allowed_file(filename: str) -> (bool, str):
     allowed = False
 
     if "." in filename:
-
         extension = filename.rsplit(".", 1)[1].lower()
 
         allowed = filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
