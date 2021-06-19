@@ -1,7 +1,6 @@
 import io
 import pydub
 import numpy as np
-import soundfile as sf
 import librosa
 
 ALLOWED_EXTENSIONS = {"mp3", "wav"}
@@ -31,6 +30,8 @@ class Song:
         self.waveform = None
         self.mono_waveform = None
 
+        self.mono_waveform_not_normalized = None
+
         # Waveforms with fortran style reshape
         self.waveform_analysis = None
         self.mono_waveform_analysis = None
@@ -40,6 +41,7 @@ class Song:
         self.sr = None
         self.sample_width = None
         self.bitrate = None
+        self.og = None
 
         self.load_from_filelike(filelike, extension)
 
@@ -67,6 +69,9 @@ class Song:
 
         # Converting to float32 for librosa
         waveform = np.array(a.get_array_of_samples())
+
+        # TO DO : trouver comment transformer la waveform en "og"
+        self.og = waveform
 
         self.sample_width = a.sample_width
         self.channels = a.channels

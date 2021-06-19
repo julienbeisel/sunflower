@@ -11,11 +11,11 @@ from sunflower.sunflower.utils import export_wav
 # %%
 # Loading example file
 
-raw_audio, extension = load_from_disk("data_benchmark/ololo.mp3")
+raw_audio, extension = load_from_disk("data/ololo.mp3")
 
 song = Song(raw_audio, extension)
 
 song.print_attributes()
 
-export_wav(song, "data_benchmark/ooo.wav")
+# export_wav(song, "data_benchmark/ooo.wav")
 
